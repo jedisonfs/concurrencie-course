@@ -5,6 +5,9 @@ import net.datafaker.Faker;
 import org.jefs.code.ThreadUtils;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Esta clase sera de tipo Not Safe lo cual nos permitira simular cuando una clase no son hilo seguro
@@ -16,14 +19,14 @@ import java.util.*;
 public class SafeCouponManager {
 
     private final Queue<Coupon> availableCoupons; // Cupones que estan disponibles
-    private final List<Coupon> redeemendCoupons; // Cupones que ya fueron retirados
-    private int redeemendCount; // Conteo de cupones ya usados
+    private final List<Coupon> redeemendCoupons; // Cupones que ya fueron retirados -
+    private int redeemendCount; // Objeto especializado para concurrencia
 
     /// Metodo que crea los cupones y los agrega a la cola
     /// se debo que cree 100 cupones aleatorios con
     public SafeCouponManager(){
-        this.availableCoupons = new LinkedList<>();
-        this.redeemendCoupons = new ArrayList<>();
+        this.availableCoupons = new LinkedList<>(); // Cola concurrente
+        this.redeemendCoupons = new ArrayList<>(); // Lista concurrente
 
         Faker faker = new Faker();
 
